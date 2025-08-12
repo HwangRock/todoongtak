@@ -13,6 +13,7 @@ public class FrontController {
 
     public FrontController() {
         controllers.add(new UserSignupController());
+        controllers.add(new HomeController());
     }
 
     public void dispatch(Socket socket) throws IOException {
