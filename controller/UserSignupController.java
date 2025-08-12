@@ -4,10 +4,10 @@ import model.User;
 import service.UserService;
 import view.UserView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,59 +22,40 @@ public class UserSignupController implements Controller {
         }
     }
 
-    public void handle(BufferedReader reader, PrintWriter writer) throws IOException {
-        String methodLine = reader.readLine();
-        String method = methodLine.split(" ")[0];
-        String path = methodLine.split(" ")[1];
-        String line;
-        while ((line = reader.readLine()) != null && !line.isEmpty()) {
+    public void handle(Request req, PrintWriter writer) throws IOException {
+        if (req.method.equals("GET")) {
+            String html = UserView.signupForm();
+            sendHtml(writer, html);
+            return;
         }
-        if (method == "GET") {
-            String res = UserView.signupForm();
-            sendHtml(writer, res);
-        } else {
-            StringBuilder bodyBuilder = new StringBuilder();
-            while (reader.ready()) {
-                bodyBuilder.append((char) reader.read());
-            }
-            String body = bodyBuilder.toString().trim();
-            System.out.println("RAW body: " + body);
-
-            Map<String, String> formData = parseForm(body);
-            String userName = formData.get("username");
-            String userId = formData.get("userid");
-            String userPw = formData.get("password");
-
-            User user = new User(userName, userId, userPw);
-            boolean success = userService.registerUser(user);
-            if (success) {
-                sendHtml(writer, UserView.successPage(userName));
-            } else {
-                sendHtml(writer, UserView.alreadyExistsPage());
-            }
-        }
-
+        Map<String, String> form = parseForm(req.body);
+        String name = form.get("username");
+        String id = form.get("userid");
+        String pw = form.get("password");
+        boolean ok = userService.registerUser(new User(name, id, pw));
+        sendHtml(writer, ok ? UserView.successPage(name) : UserView.alreadyExistsPage());
     }
-
 
     private Map<String, String> parseForm(String body) {
-        Map<String, String> result = new HashMap<>();
-        String[] pairs = body.split("&");
-        for (String pair : pairs) {
-            String[] kv = pair.split("=");
+        Map<String, String> m = new HashMap<>();
+        for (String p : body.split("&")) {
+            String[] kv = p.split("=", 2);
             if (kv.length == 2) {
-                result.put(kv[0], kv[1]);
+                m.put(URLDecoder.decode(kv[0].trim(), StandardCharsets.UTF_8),
+                        URLDecoder.decode(kv[1].trim(), StandardCharsets.UTF_8));
             }
         }
-        return result;
+        return m;
     }
 
-    private void sendHtml(PrintWriter writer, String body) throws UnsupportedEncodingException {
-        writer.println("HTTP/1.1 200 OK");
-        writer.println("Content-Type: text/html; charset=UTF-8");
-        writer.println("Content-Length: " + body.getBytes("UTF-8").length);
-        writer.println();
-        writer.println(body);
-        writer.flush();
+
+    private void sendHtml(PrintWriter w, String body) {
+        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+        w.println("HTTP/1.1 200 OK");
+        w.println("Content-Type: text/html; charset=UTF-8");
+        w.println("Content-Length: " + bytes.length);
+        w.println();
+        w.write(body);
+        w.flush();
     }
 }

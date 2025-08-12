@@ -5,5 +5,5 @@ import java.io.*;
 public interface Controller {
     boolean supports(String method, String path);
 
-    void handle(BufferedReader reader, PrintWriter writer) throws IOException;
+    void handle(Request req, PrintWriter res) throws IOException;
 }
