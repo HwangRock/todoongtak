@@ -1,5 +1,6 @@
 package controller;
 
+import domain.Request;
 import model.User;
 import service.UserService;
 import view.UserView;

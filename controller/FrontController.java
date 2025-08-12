@@ -1,5 +1,7 @@
 package controller;
 
+import domain.Request;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;

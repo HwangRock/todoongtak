@@ -1,6 +1,7 @@
 package controller;
 
-import java.io.IOException;
+import domain.Request;
+
 import java.io.PrintWriter;
 
 public class HomeController implements Controller {
