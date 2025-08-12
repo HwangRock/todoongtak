@@ -1,12 +1,11 @@
-import controller.UserController;
-import view.UserView;
+import controller.UserSignupController;
 
 import java.io.*;
 import java.net.*;
 
 public class Server {
     private final int port;
-    private UserController userController=new UserController();
+    private UserSignupController userController=new UserSignupController();
 
     public Server(int port) {
         this.port = port;

@@ -11,21 +11,28 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserController {
+public class UserSignupController implements Controller {
     private final UserService userService = new UserService();
 
-    public void handleRequest(String method, String path, BufferedReader reader, PrintWriter writer) throws IOException {
-        if (method.equals("GET") && path.equals("/signup")) {
-            String view = UserView.signupForm();
-            sendHtml(writer, view);
-        } else if (method.equals("POST") && path.equals("/signup")) {
+    public boolean supports(String method, String path) {
+        if ((method.equals("POST") || method.equals("GET")) && path.equals("/signup")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-            String line;
-            while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                // 헤더 스킵
-            }
-
-            // 바디 읽기
+    public void handle(BufferedReader reader, PrintWriter writer) throws IOException {
+        String methodLine = reader.readLine();
+        String method = methodLine.split(" ")[0];
+        String path = methodLine.split(" ")[1];
+        String line;
+        while ((line = reader.readLine()) != null && !line.isEmpty()) {
+        }
+        if (method == "GET") {
+            String res = UserView.signupForm();
+            sendHtml(writer, res);
+        } else {
             StringBuilder bodyBuilder = new StringBuilder();
             while (reader.ready()) {
                 bodyBuilder.append((char) reader.read());
@@ -34,24 +41,21 @@ public class UserController {
             System.out.println("RAW body: " + body);
 
             Map<String, String> formData = parseForm(body);
-            String name = formData.get("username");
-            String id = formData.get("userid");
-            String pw = formData.get("password");
-            System.out.println("Parsed - name: " + name + ", id: " + id + ", pw: " + pw);
+            String userName = formData.get("username");
+            String userId = formData.get("userid");
+            String userPw = formData.get("password");
 
-            User user = new User(name, id, pw);
+            User user = new User(userName, userId, userPw);
             boolean success = userService.registerUser(user);
-
             if (success) {
-                String successView = UserView.successPage(name);
-                sendHtml(writer, successView);
+                sendHtml(writer, UserView.successPage(userName));
             } else {
-                String failView = UserView.alreadyExistsPage();
-                sendHtml(writer, failView);
+                sendHtml(writer, UserView.alreadyExistsPage());
             }
         }
 
     }
+
 
     private Map<String, String> parseForm(String body) {
         Map<String, String> result = new HashMap<>();
