@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserSignupController implements Controller {
@@ -20,6 +21,13 @@ public class UserSignupController implements Controller {
         } else {
             return false;
         }
+    }
+
+    public List<Route> routes() {
+        return List.of(
+                new Route("POST", "/signup", this),
+                new Route("GET", "/signup", this)
+        );
     }
 
     public void handle(Request req, PrintWriter writer) throws IOException {

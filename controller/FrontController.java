@@ -10,6 +10,11 @@ import java.util.Map;
 public class FrontController {
 
     private final List<Controller> controllers = new ArrayList<>();
+    private final HashMap<ApiKey,Controller>controllerHashMap=new HashMap<>();
+
+    private void initializeHashMap(){
+
+    }
 
     public FrontController() {
         controllers.add(new UserSignupController());

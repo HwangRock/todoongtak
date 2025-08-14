@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class HomeController implements Controller {
 
@@ -11,6 +12,12 @@ public class HomeController implements Controller {
         } else {
             return false;
         }
+    }
+
+    public List<Route> routes() {
+        return List.of(
+                new Route("GET", "/", this)
+        );
     }
 
     public void handle(Request req, PrintWriter res) {
