@@ -10,15 +10,24 @@ import java.util.Map;
 public class FrontController {
 
     private final List<Controller> controllers = new ArrayList<>();
-    private final HashMap<ApiKey,Controller>controllerHashMap=new HashMap<>();
+    private final HashMap<ApiKey, Controller> controllerHashMap = new HashMap<>();
 
-    private void initializeHashMap(){
-
+    private void InitializeHashMap() {
+        for (Controller c : controllers) {
+            for (Route r : c.routes()) {
+                ApiKey key = new ApiKey(r.method, r.path);
+                if (controllerHashMap.containsKey(key)) {
+                    throw new IllegalStateException("Duplicate route: " + key);
+                }
+                controllerHashMap.put(key, c);
+            }
+        }
     }
 
     public FrontController() {
         controllers.add(new UserSignupController());
         controllers.add(new HomeController());
+        InitializeHashMap();
     }
 
     public void dispatch(Socket socket) throws IOException {
