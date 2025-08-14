@@ -5,10 +5,10 @@ public final class Route {
     public final String path;
     public final Controller controller;
 
-    public Route(String method, String path, Controller controller){
-        this.method=method;
-        this.path=path;
-        this.controller=controller;
+    public Route(String method, String path, Controller controller) {
+        this.method = method;
+        this.path = path;
+        this.controller = controller;
     }
 
 
