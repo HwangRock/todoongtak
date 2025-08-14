@@ -69,13 +69,13 @@ public class FrontController {
             body = new String(buf, 0, read);
         }
 
+        ApiKey reqKey = new ApiKey(method, path);
         Request req = new Request(method, path, httpVer, headers, body);
 
-        for (Controller c : controllers) {
-            if (c.supports(method, path)) {
-                c.handle(req, writer);
-                return;
-            }
+        Controller controller = controllerHashMap.get(reqKey);
+        if (controller != null) {
+            controller.handle(req, writer);
+            return;
         }
 
         writer.println("HTTP/1.1 404 Not Found");
