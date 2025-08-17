@@ -1,5 +1,6 @@
 package repository;
 
+import global.UserKey;
 import model.User;
 
 import java.util.HashMap;

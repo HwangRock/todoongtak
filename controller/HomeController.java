@@ -1,16 +1,17 @@
 package controller;
 
-import java.io.IOException;
+import global.Request;
+import global.Route;
+
 import java.io.PrintWriter;
+import java.util.List;
 
 public class HomeController implements Controller {
 
-    public boolean supports(String method, String path) {
-        if (method.equals("GET") && path.equals("/")) {
-            return true;
-        } else {
-            return false;
-        }
+    public List<Route> routes() {
+        return List.of(
+                new Route("GET", "/", this)
+        );
     }
 
     public void handle(Request req, PrintWriter res) {

@@ -1,5 +1,9 @@
 package controller;
 
+import global.ApiKey;
+import global.Request;
+import global.Route;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,10 +14,24 @@ import java.util.Map;
 public class FrontController {
 
     private final List<Controller> controllers = new ArrayList<>();
+    private final HashMap<ApiKey, Controller> controllerHashMap = new HashMap<>();
+
+    private void InitializeHashMap() {
+        for (Controller c : controllers) {
+            for (Route r : c.routes()) {
+                ApiKey key = new ApiKey(r.method, r.path);
+                if (controllerHashMap.containsKey(key)) {
+                    throw new IllegalStateException("Duplicate route: " + key);
+                }
+                controllerHashMap.put(key, c);
+            }
+        }
+    }
 
     public FrontController() {
         controllers.add(new UserSignupController());
         controllers.add(new HomeController());
+        InitializeHashMap();
     }
 
     public void dispatch(Socket socket) throws IOException {
@@ -55,13 +73,13 @@ public class FrontController {
             body = new String(buf, 0, read);
         }
 
+        ApiKey reqKey = new ApiKey(method, path);
         Request req = new Request(method, path, httpVer, headers, body);
 
-        for (Controller c : controllers) {
-            if (c.supports(method, path)) {
-                c.handle(req, writer);
-                return;
-            }
+        Controller controller = controllerHashMap.get(reqKey);
+        if (controller != null) {
+            controller.handle(req, writer);
+            return;
         }
 
         writer.println("HTTP/1.1 404 Not Found");

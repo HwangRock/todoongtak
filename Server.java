@@ -1,5 +1,3 @@
-
-
 import controller.FrontController;
 
 import java.io.*;
@@ -14,7 +12,11 @@ public class Server {
     }
 
     public void start() throws IOException {
+        long startTime = System.currentTimeMillis();
+
         try (ServerSocket serverSocket = new ServerSocket(port)) {
+            long endTime = System.currentTimeMillis();
+            System.out.println("Server started time: " + (endTime - startTime) + "ms");
             System.out.println("Hello handsome HwangRock~! your server : http://localhost:" + port);
 
             while (true) {

@@ -1,4 +1,4 @@
-package repository;
+package global;
 
 public class UserKey {
     public String userId;
