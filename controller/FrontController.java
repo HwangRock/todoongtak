@@ -1,5 +1,9 @@
 package controller;
 
+import global.ApiKey;
+import global.Request;
+import global.Route;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;

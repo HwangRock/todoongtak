@@ -1,4 +1,6 @@
-package controller;
+package global;
+
+import controller.Controller;
 
 public final class Route {
     public final String method;

@@ -1,7 +1,7 @@
 package service;
 
 import model.User;
-import repository.UserKey;
+import global.UserKey;
 import repository.UserRepository;
 
 public class UserService {

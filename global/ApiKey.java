@@ -1,4 +1,4 @@
-package controller;
+package global;
 
 import java.util.Objects;
 
