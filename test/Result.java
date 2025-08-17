@@ -14,7 +14,7 @@ public class Result {
 
     @Override
     public String toString() {
-        return String.format("avg=%.3fms p50=%.3f p95=%.3f p99=%.3f alloc/op=%d",
+        return String.format("avg=%.3fms p50=%.3fms p95=%.3fms p99=%.3fms alloc/op=%d",
                 avgMs, p50Ms, p95Ms, p99Ms, allocPerOpBytes);
     }
 }
