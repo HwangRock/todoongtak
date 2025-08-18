@@ -1,0 +1,12 @@
+.git/
+.idea/
+**/*.iml
+out/
+*.class
+
+bench/
+test/
+
+Dockerfile
+
+.env
