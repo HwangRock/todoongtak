@@ -12,6 +12,7 @@ out/
 
 .DS_Store
 Thumbs.db
+.env
 
 *.class
 *.swp
