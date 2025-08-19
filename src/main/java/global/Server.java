@@ -1,3 +1,5 @@
+package global;
+
 import controller.FrontController;
 
 import java.io.*;
@@ -16,7 +18,7 @@ public class Server {
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             long endTime = System.currentTimeMillis();
-            System.out.println("Server started time: " + (endTime - startTime) + "ms");
+            System.out.println("src.main.java.global.Server started time: " + (endTime - startTime) + "ms");
             System.out.println("Hello handsome HwangRock~! your server : http://localhost:" + port);
 
             while (true) {
@@ -31,11 +33,11 @@ public class Server {
                         try {
                             OutputStream out = socket.getOutputStream();
                             PrintWriter w = new PrintWriter(out, true);
-                            w.println("HTTP/1.1 500 Internal Server Error");
+                            w.println("HTTP/1.1 500 Internal src.main.java.global.Server Error");
                             w.println("Content-Type: text/plain; charset=UTF-8");
                             w.println("Content-Length: 21");
                             w.println();
-                            w.print("Internal Server Error");
+                            w.print("Internal src.main.java.global.Server Error");
                             w.flush();
                         } catch (IOException ignored) {
                         }

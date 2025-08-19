@@ -1,0 +1,17 @@
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+*.log
+
+.DS_Store
+Thumbs.db
+
+*.class
+*.swp

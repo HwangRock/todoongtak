@@ -1,12 +1,22 @@
-.git/
-.idea/
-**/*.iml
-out/
+.gradle
+build
+out
+
+.idea
+*.iml
+*.ipr
+*.iws
+
+.DS_Store
+Thumbs.db
+
+*.log
 *.class
 
-bench/
-test/
+.git
+.gitignore
 
-Dockerfile
+docker-compose.yml
+.dockerignore
 
-.env
+src/test
