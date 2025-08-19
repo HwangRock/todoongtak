@@ -7,6 +7,10 @@ on:
     types: [closed]
     branches: [main]
 
+concurrency:
+  group: cicd-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-only:
     if: github.event_name == 'push'
@@ -15,6 +19,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -22,7 +29,7 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Gradle Build
+      - name: Gradle Build (no tests)
         run: ./gradlew clean build --no-daemon -x test
 
   docker-publish:
@@ -33,8 +40,13 @@ jobs:
       github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout merged commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -43,10 +55,10 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Gradle Build (optional)
+      - name: Gradle Build (no tests)
         run: ./gradlew clean build --no-daemon -x test
 
-      - name: Set image tags
+      - name: Set image tag (short SHA)
         id: vars
         run: |
           SHA_TAG=${GITHUB_SHA::7}
@@ -64,3 +76,7 @@ jobs:
         run: |
           docker push hwangrock/todoongtak:latest
           docker push hwangrock/todoongtak:${{ steps.vars.outputs.sha_tag }}
+
+      - name: Logout
+        if: always()
+        run: docker logout
