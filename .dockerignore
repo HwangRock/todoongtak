@@ -6,6 +6,8 @@ out
 *.iml
 *.ipr
 *.iws
+.env.example
+.env
 
 .DS_Store
 Thumbs.db
