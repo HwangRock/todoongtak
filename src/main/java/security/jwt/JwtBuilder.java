@@ -1,10 +1,7 @@
 package security.jwt;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -31,7 +28,7 @@ public class JwtBuilder {
         return this;
     }
 
-    public String build() throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeyException {
+    public String build() {
         Objects.requireNonNull(userId, "userId required");
         Objects.requireNonNull(secret, "secret required");
 
@@ -41,17 +38,19 @@ public class JwtBuilder {
         JwtHeader header = new JwtHeader();
         JwtPayload payload = new JwtPayload(now, expire, userId);
 
-        String headerJson = om.writeValueAsString(header);
-        String payloadJson = om.writeValueAsString(payload);
+        try {
+            String headerJson = om.writeValueAsString(header);
+            String payloadJson = om.writeValueAsString(payload);
 
-        String h = encrypt.Base64(headerJson);
-        String p = encrypt.Base64(payloadJson);
-        String unsigned = h + "." + p;
+            String h = encrypt.Base64(headerJson);
+            String p = encrypt.Base64(payloadJson);
+            String unsigned = h + "." + p;
 
-        String signed = encrypt.HmacSha256(unsigned, secret);
+            String signed = encrypt.HmacSha256(unsigned, secret);
 
-        String jwt = unsigned + "." + signed;
-
-        return jwt;
+            return unsigned + "." + signed;
+        } catch (Exception e) {
+            throw new IllegalStateException("JWT build failed", e);
+        }
     }
 }

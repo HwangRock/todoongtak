@@ -5,6 +5,18 @@ public class JwtPayload {
     private long exp;
     private String userId;
 
+    public long getIat() {
+        return iat;
+    }
+
+    public long getExp() {
+        return exp;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
     public JwtPayload(long iat, long exp, String userId) {
         this.iat = iat;
         this.exp = exp;
