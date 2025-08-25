@@ -29,9 +29,8 @@ public class FrontController {
     }
 
     public FrontController() {
-        controllers.add(new UserSignupController());
+        controllers.add(new UserController());
         controllers.add(new HomeController());
-        controllers.add(new LoginController());
         InitializeHashMap();
     }
 

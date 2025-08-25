@@ -12,7 +12,8 @@ public class LoginUserPerf  extends ServiceTestTemplate<UserService> {
     @Override
     protected void act(UserService svc){
         String userId="hwang12345";
-        String at=svc.createAccessToken(userId);
+        String pw="a1235";
+        String at=svc.createAccessToken(userId,pw);
         System.out.println(at);
     }
 }
