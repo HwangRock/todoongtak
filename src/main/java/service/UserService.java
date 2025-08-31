@@ -4,6 +4,8 @@ import model.User;
 import repository.UserRepository;
 import security.jwt.JwtBuilder;
 
+import java.util.Optional;
+
 public class UserService {
     private final UserRepository userRepository = new UserRepository();
     private final JwtBuilder jwtBuilder = new JwtBuilder();
@@ -17,9 +19,9 @@ public class UserService {
         }
     }
 
-    public String createAccessToken(String id,String pw) {
+    public Optional<String> createAccessToken(String id, String pw) {
         if(!userRepository.checkUser(id,pw)){
-            return "x";
+            return null;
         }
         String accessToken = jwtBuilder
                 .userId(id)
@@ -27,6 +29,6 @@ public class UserService {
                 .secret("dwdd")
                 .build();
 
-        return accessToken;
+        return accessToken.describeConstable();
     }
 }

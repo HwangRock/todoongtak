@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserController implements Controller {
     private final UserService userService = new UserService();
@@ -39,6 +40,7 @@ public class UserController implements Controller {
             String pw = form.get("password");
             boolean ok = userService.registerUser(new User(name, id, pw));
             sendHtml(writer, ok ? UserView.successPage(name) : UserView.alreadyExistsPage());
+            return;
         }
         if (req.method.equals("GET") && req.path.equals("/login")) {
             String html = UserView.loginForm();
@@ -49,8 +51,8 @@ public class UserController implements Controller {
             Map<String, String> form = parseForm(req.body);
             String id = form.get("userid");
             String pw = form.get("password");
-            String jwt = userService.createAccessToken(id, pw);
-            if (!jwt.equals("x")) {
+            Optional<String> jwt = userService.createAccessToken(id, pw);
+            if (jwt.get().isEmpty()) {
                 writer.println("HTTP/1.1 302 Found");
                 writer.println("Set-Cookie: access_token=" + jwt
                         + "; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600");
