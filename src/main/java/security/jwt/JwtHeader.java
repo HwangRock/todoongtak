@@ -1,14 +1,7 @@
 package security.jwt;
 
-public class JwtHeader {
-    private final String alg = "HS256";
-    private final String typ = "JWT";
-
-    public String getAlg() {
-        return alg;
-    }
-
-    public String getTyp() {
-        return typ;
+public record JwtHeader(String alg, String typ) {
+    public JwtHeader() {
+        this("HS256", "JWT");
     }
 }
