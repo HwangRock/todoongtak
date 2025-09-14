@@ -15,6 +15,8 @@ jobs:
   build-only:
     if: github.event_name == 'push' && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      JWT_KEY: ${{ secrets.JWT_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

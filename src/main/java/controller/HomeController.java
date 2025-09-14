@@ -22,7 +22,7 @@ public class HomeController implements Controller {
                       <h1>투둥탁!</h1>
                       <ul>
                         <li><a href="/signup">회원가입</a></li>
-                        <li><a href="/login">로그인(예정)</a></li>
+                        <li><a href="/login">로그인</a></li>
                       </ul>
                     </body></html>
                 """;
